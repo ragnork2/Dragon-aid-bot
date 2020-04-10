@@ -1,0 +1,26 @@
+{
+  "name": "thegreatdiscorddanddbotproject",
+  "version": "1.0.0",
+  "description": "A bot that pulls information from the D and D basic rules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "13.1.0",
+    "npm": "*"
+  },
+  "author": "ragnork1487",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "discord.js": "^12.1.1",
+    "dotenv": "^8.2.0",
+    "git": "^0.1.5",
+    "node-fetch": "^2.6.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {},
+  "keywords": []
+}
