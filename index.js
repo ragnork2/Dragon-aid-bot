@@ -1,7 +1,5 @@
-const {
-    prefix,
-    token
-} = require('./config.json');
+require('dotenv').config()
+const prefix = process.env.PREFIX;
 const request = require('request');
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -18,6 +16,10 @@ client.on('message', msg =>
     const command = args.shift().toLowerCase();
     if (msg.author.bot) 
 		return;
+    if (msg.content === `${prefix}invite`) 
+    {
+	    msg.reply('https://discordapp.com/oauth2/authorize?client_id=697579011005481021&scope=bot&permissions=387072');
+	}
 		
     if (msg.content === `${prefix}ping`) 
     {
@@ -67,4 +69,4 @@ client.on('message', msg =>
 	}
 });
 
-client.login(token);
+client.login();
