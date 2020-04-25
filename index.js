@@ -9,23 +9,24 @@ client.on("ready", () => {
 
 client.on("message", msg => {
   if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-  //const delim = "-";
-  const args = msg.content.slice(prefix.length).split(" ");
-  const command = args.shift().toLowerCase();
-  if (msg.author.bot) return
-  if (!args.length) { 		return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`); 	}
+  const message = msg;
+  const badargs = message.content.slice(prefix.length).split(/ +/);
+  const command = badargs.shift().toLowerCase();
+  const args = badargs.join("-");
+  if (msg.author.bot) return;
+  if (!args.length) {
+    return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`);
+  }
   if (msg.content.startsWith(`${prefix}spell`)) {
     request(
       `http://www.dnd5eapi.co/api/spells/${args}`,
       { json: true },
       (err, res, body) => {
-       
         if (err) {
-           msg.channel.send("Invalid, please try again");
-          
+          msg.channel.send("Invalid, please try again");
         } else if (command === "spell") {
           msg.channel.send(`Name: ${body.name}
-        ${body.school.name}
+          ${body.school.name}
           Level:${body.level}
           Range: ${body.range}
           Components: ${body.components} (Material Components, if any: ${body.material})
