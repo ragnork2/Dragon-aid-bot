@@ -1,72 +1,99 @@
-require('dotenv').config()
+require("dotenv").config();
 const prefix = process.env.PREFIX;
-const request = require('request');
-const Discord = require('discord.js');
+const request = require("request");
+const Discord = require("discord.js");
 const client = new Discord.Client();
-client.on('ready', () => 
-{
-    console.log(`Logged in as ${client.user.tag}!`);
+client.on("ready", () => {
+  console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', msg => 
-{
-    if (!msg.content.startsWith(prefix) || msg.author.bot) 
-		return;
-	const args = msg.content.slice(prefix.length).split(' ');
-    const command = args.shift().toLowerCase();
-    if (msg.author.bot) 
-		return;
-    if (msg.content === `${prefix}invite`) 
-    {
-	    msg.reply('https://discordapp.com/oauth2/authorize?client_id=697579011005481021&scope=bot&permissions=387072');
-	}
-		
-    if (msg.content === `${prefix}ping`) 
-    {
-	    msg.reply('Pong!');
-	}
-    
-	if (msg.content === `${prefix}rule`) 
-	{
-        msg.reply('rules are not yet implemented, check out https://5thsrd.org/ for rules in the meantime');
-    }
-
-    if (msg.content.startsWith(`${prefix}spell`)) 
-	{
-        request(`http://www.dnd5eapi.co/api/spells/${args}`, {json: true}, (err, res, body) => 
-		{
-			if (err) 
-			{
-                return console.log(err);
-            } 
-			else if (command === 'spell')
-			{
-                msg.channel.send(`Name: ${body.name}`);
-            	msg.channel.send(`${body.desc}`);
-            	msg.channel.send(`At Higher Levels: ${body.higher_level}`)
-			}	
-		});
-    }
-	if (msg.content.startsWith(`${prefix}class`)) 
-	{
-    	request(`http://www.dnd5eapi.co/api/classes/${args}`, {json: true}, (err, res, body) => 
-		{
-        	if (err) 
-			{
-            	return console.log(err);
-            } 
-			else if (command === 'class')
-			{
-             	msg.channel.send(`Name: ${body.name}`);
-                msg.channel.send(`Hit Dice:${body.hit_die}`);
-                msg.channel.send(`Proficiency Options: ${body.proficiency_choices}`);
-                msg.channel.send(`Starting Equipment: ${body.starting_equipment}`);
-                msg.channel.send(`Proficiencies: ${body.proficiencies}`);
-                msg.channel.send(`Subclasses: ${body.subclasses}`);
-			}
-
-        });
-	}
+client.on("message", msg => {
+  if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+  //const delim = "-";
+  const args = msg.content.slice(prefix.length).split(" ");
+  const command = args.shift().toLowerCase();
+  if (msg.author.bot) return
+  if (!args.length) { 		return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`); 	}
+  if (msg.content.startsWith(`${prefix}spell`)) {
+    request(
+      `http://www.dnd5eapi.co/api/spells/${args}`,
+      { json: true },
+      (err, res, body) => {
+       
+        if (err) {
+           msg.channel.send("Invalid, please try again");
+          
+        } else if (command === "spell") {
+          msg.channel.send(`Name: ${body.name}
+        ${body.school.name}
+          Level:${body.level}
+          Range: ${body.range}
+          Components: ${body.components} (Material Components, if any: ${body.material})
+          Duration: ${body.duration} Concentration? ${body.concentration}
+          Time to cast: ${body.casting_time}
+          ${body.desc}
+          At Higher Levels: ${body.higher_level}`);
+        }
+      }
+    );
+  }
+  if (msg.content.startsWith(`${prefix}weapon`)) {
+    request(
+      `http://www.dnd5eapi.co/api/equipment/${args}`,
+      { json: true },
+      (err, res, body) => {
+        if (err) {
+          msg.channel.send("Invalid,please try again");
+        } else if (command === "weapon") {
+          msg.channel.send(`Name: ${body.name}`);
+          msg.channel.send(
+            `short range: ${body.range.normal}ft; long range: ${body.range.long}ft`
+          );
+          msg.channel.send(
+            `Damage: ${body.damage.damage_dice} ${body.damage.damage_type.name}`
+          );
+          msg.channel.send(
+            `Properties:${body.properties.map(property => property.name)}`
+          );
+        }
+      }
+    );
+  }
+  if (msg.content.startsWith(`${prefix}condition`)) {
+    request(
+      `http://www.dnd5eapi.co/api/conditions/${args}`,
+      { json: true },
+      (err, res, body) => {
+        if (err) {
+          msg.channel.send("Invalid,Please try again");
+        } else if (command === "condition") {
+          msg.channel.send(`Name: ${body.name}`);
+          msg.channel.send(`${body.desc}`);
+        }
+      }
+    );
+  }
+  if (msg.content.startsWith(`${prefix}armor`)) {
+    request(
+      `http://www.dnd5eapi.co/api/equipment/${args}`,
+      { json: true },
+      (err, res, body) => {
+        if (err) {
+          msg.channel.send("invalid, please try again");
+        } else if (command === "armor") {
+          msg.channel.send(`Name: ${body.name}`);
+          msg.channel.send(`Type: ${body.armor_category}`);
+          msg.channel.send(`AC:${body.armor_class.base}`);
+          msg.channel.send(
+            `Do I get A dex bonus:${body.armor_class.dex_bonus} Maximum Bonus: ${body.armor_class.max_bonus}`
+          );
+          msg.channel.send(
+            `Disadvantage on stealth?: ${body.stealth_disadvantage}`
+          );
+        }
+      }
+    );
+  }
 });
 
 client.login();
