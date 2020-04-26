@@ -82,7 +82,7 @@ client.on("message", msg => {
         if (err) {
           msg.channel.send("invalid, please try again");
         } else if (command === "armor") {
-          msg.channel.send(`Name: ${body.name}`);
+            msg.channel.send(`Name: ${body.name}`);
           msg.channel.send(`Type: ${body.armor_category}`);
           msg.channel.send(`AC:${body.armor_class.base}`);
           msg.channel.send(
