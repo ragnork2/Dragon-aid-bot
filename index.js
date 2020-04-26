@@ -56,6 +56,7 @@ client.on("message", msg => {
           msg.channel.send(
             `Properties:${body.properties.map(property => property.name)}`
           );
+          msg.channel.send (`Cost:${body.cost.quantity} ${body.cost.unit}`);
         }
       }
     );
@@ -82,14 +83,15 @@ client.on("message", msg => {
         if (err) {
           msg.channel.send("invalid, please try again");
         } else if (command === "armor") {
-            msg.channel.send(`Name: ${body.name}`);
+          msg.channel.send(`Name: ${body.name}`);
           msg.channel.send(`Type: ${body.armor_category}`);
           msg.channel.send(`AC:${body.armor_class.base}`);
           msg.channel.send(
             `Do I get A dex bonus:${body.armor_class.dex_bonus} Maximum Bonus: ${body.armor_class.max_bonus}`
           );
           msg.channel.send(
-            `Disadvantage on stealth?: ${body.stealth_disadvantage}`
+            `Disadvantage on stealth?: ${body.stealth_disadvantage}`)
+            msg.channel.send (`Cost:${body.cost.quantity} ${body.cost.unit}`
           );
         }
       }
