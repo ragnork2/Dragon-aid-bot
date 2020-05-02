@@ -14,6 +14,8 @@ client.on("message", msg => {
   const command = badargs.shift().toLowerCase();
   const args = badargs.join("-");
   if (msg.author.bot) return;
+  if (msg.content.startsWith (`${prefix}help`))
+    msg.reply('Need help, head to https://discord.gg/UEcNzdw')
   if (!args.length) {
     return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`);
   }
@@ -56,7 +58,7 @@ client.on("message", msg => {
           msg.channel.send(
             `Properties:${body.properties.map(property => property.name)}`
           );
-          msg.channel.send (`Cost:${body.cost.quantity} ${body.cost.unit}`);
+          msg.channel.send(`Cost:${body.cost.quantity} ${body.cost.unit}`);
         }
       }
     );
@@ -90,11 +92,33 @@ client.on("message", msg => {
             `Do I get A dex bonus:${body.armor_class.dex_bonus} Maximum Bonus: ${body.armor_class.max_bonus}`
           );
           msg.channel.send(
-            `Disadvantage on stealth?: ${body.stealth_disadvantage}`)
-            msg.channel.send (`Cost:${body.cost.quantity} ${body.cost.unit}`
+            `Disadvantage on stealth?: ${body.stealth_disadvantage}`
           );
+          msg.channel.send(`Cost:${body.cost.quantity} ${body.cost.unit}`);
         }
       }
+      );
+  }
+          if (msg.content.startsWith(`${prefix}feature`)) {
+            request(
+              `http://www.dnd5eapi.co/api/features/${args}`,
+              { json: true },
+              (err, res, body) => {
+                if (err) {
+                  msg.channel.send("Invalid, please try again");
+                } else if (command === "feature") {
+                  msg.channel.send(`
+          Name: ${body.name}
+          Class: ${body.class.name}
+          Level:${body.level}
+          ${body.desc}`);
+                  
+                }
+              }
+           
+       
+        
+      
     );
   }
 });
