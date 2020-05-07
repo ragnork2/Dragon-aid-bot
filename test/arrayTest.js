@@ -1,3 +1,4 @@
+var chai = require('chai');
 var assert = chai.assert;
 
 describe('Array', function() {
