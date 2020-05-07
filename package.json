@@ -14,6 +14,7 @@
   "author": "ragnork1487",
   "license": "ISC",
   "dependencies": {
+    "vows": "^0.8.3",
     "discord.js": "^12.1.1",
     "dotenv": "^8.2.0",
     "request": "^2.88.2"
