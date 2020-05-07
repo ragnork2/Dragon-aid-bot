@@ -4,7 +4,7 @@
   "description": "A bot that pulls information from the D and D basic rules",
   "main": "index.js",
   "scripts": {
-    "test": "vows --spec"",
+    "test": "vows --spec",
     "start": "node index.js"
   },
   "engines": {
