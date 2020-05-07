@@ -14,7 +14,7 @@
   "author": "ragnork1487",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
     "chai": "^4.2.0",
     "mocha": "^7.1.2",
     "discord.js": "^12.1.1",
