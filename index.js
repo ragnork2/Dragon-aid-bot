@@ -15,15 +15,6 @@ client.on("message", msg => {
   const badargs = message.content.slice(prefix.length).split(/ +/);
   const command = badargs.shift().toLowerCase();
   const args = badargs.join("-");
-  app.get('/', (req, res) => {
-  res.send('ci with travis');
-});
-
-const server = app.listen(3000, () => {
-  console.log('App running on port 3000');
-});
-
-module.exports = server;
   if (msg.author.bot) return;
   
   if (msg.content.startsWith (`${prefix}help`))
