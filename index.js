@@ -1,8 +1,6 @@
 require("dotenv").config();
 const prefix = process.env.PREFIX;
 const request = require("request");
-const express = require('express');
-const app = express();
 const Discord = require("discord.js");
 const client = new Discord.Client();
 client.on("ready", () => {
@@ -16,7 +14,6 @@ client.on("message", msg => {
   const command = badargs.shift().toLowerCase();
   const args = badargs.join("-");
   if (msg.author.bot) return;
-  
   if (msg.content.startsWith (`${prefix}help`))
     msg.reply('Need help, head to https://discord.gg/UEcNzdw')
   if (!args.length) {
@@ -88,16 +85,13 @@ client.on("message", msg => {
         if (err) {
           msg.channel.send("invalid, please try again");
         } else if (command === "armor") {
-          msg.channel.send(`Name: ${body.name}`);
-          msg.channel.send(`Type: ${body.armor_category}`);
-          msg.channel.send(`AC:${body.armor_class.base}`);
-          msg.channel.send(
-            `Do I get A dex bonus:${body.armor_class.dex_bonus} Maximum Bonus: ${body.armor_class.max_bonus}`
-          );
-          msg.channel.send(
-            `Disadvantage on stealth?: ${body.stealth_disadvantage}`
-          );
-          msg.channel.send(`Cost:${body.cost.quantity} ${body.cost.unit}`);
+          msg.channel.send(`
+Name: ${body.name} 
+Type: ${body.armor_category}
+AC:${body.armor_class.base}
+Do I get A dex bonus:${body.armor_class.dex_bonus} Maximum Bonus: ${body.armor_class.max_bonus}
+Disadvantage on stealth?: ${body.stealth_disadvantage}
+Cost:${body.cost.quantity} ${body.cost.unit}`);
         }
       }
       );
