@@ -3,6 +3,17 @@ const prefix = process.env.PREFIX;
 const request = require("request");
 const Discord = require("discord.js");
 const client = new Discord.Client();
+const http = require("http");
+const express = require("express");
+const app = express();
+app.get("/", (request, response) => {
+  console.log(Date.now() + " Ping Received");
+  response.sendStatus(200);
+});
+app.listen(process.env.PORT);
+setInterval(() => {
+  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+}, 280000);
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -14,8 +25,8 @@ client.on("message", msg => {
   const command = badargs.shift().toLowerCase();
   const args = badargs.join("-");
   if (msg.author.bot) return;
-  if (msg.content.startsWith (`${prefix}help`))
-    msg.reply('Need help, head to https://discord.gg/UEcNzdw')
+  if (msg.content.startsWith(`${prefix}help`))
+    msg.reply("Need help, head to https://discord.gg/UEcNzdw");
   if (!args.length) {
     return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`);
   }
@@ -94,28 +105,23 @@ Disadvantage on stealth?: ${body.stealth_disadvantage}
 Cost:${body.cost.quantity} ${body.cost.unit}`);
         }
       }
-      );
+    );
   }
-          if (msg.content.startsWith(`${prefix}feature`)) {
-            request(
-              `http://www.dnd5eapi.co/api/features/${args}`,
-              { json: true },
-              (err, res, body) => {
-                if (err) {
-                  msg.channel.send("Invalid, please try again");
-                } else if (command === "feature") {
-                  msg.channel.send(`
+  if (msg.content.startsWith(`${prefix}feature`)) {
+    request(
+      `http://www.dnd5eapi.co/api/features/${args}`,
+      { json: true },
+      (err, res, body) => {
+        if (err) {
+          msg.channel.send("Invalid, please try again");
+        } else if (command === "feature") {
+          msg.channel.send(`
           Name: ${body.name}
           Class: ${body.class.name}
           Level:${body.level}
           ${body.desc}`);
-                  
-                }
-              }
-           
-       
-        
-      
+        }
+      }
     );
   }
 });
