@@ -124,6 +124,58 @@ Cost:${body.cost.quantity} ${body.cost.unit}`);
       }
     );
   }
+  if (msg.content.startsWith(`${prefix}monster`)) {
+    request(
+      `http://www.dnd5eapi.co/api/monsters/${args}`,
+      { json: true },
+      (err, res, body) => {
+        if (err) {
+          msg.channel.send("Invalid, please try again");
+        } else if (command === "monster") {
+          msg.channel.send(`
+                    **Name**: ${body.name}
+          **Size**: ${body.size}
+          **Type**:${body.type}
+          **alignment**:${body.alignment}
+          **AC**: ${body.armor_class}
+          **HP**: ${body.hit_points}
+          **Hit Dice**: ${body.hit_dice}
+          **Walk Speed**: ${body.speed.walk}
+          **Swim Speed**: ${body.speed.swim}
+          **Dig Speed**: ${body.speed.burrow}
+          **Fly Speed**: ${body.speed.fly}
+          **STR**: ${body.strength}
+          **DEX**: ${body.dexterity}
+          **CON**: ${body.constitution}
+          **INT**: ${body.intelligence}
+          **WIS**: ${body.wisdom}
+          **CHA**: ${body.charisma}
+          **proficiencies**:${body.proficiencies.map(
+            proficiency => proficiency.name
+          )}
+          **Vulnerabilities**: ${body.damage_vulnerabilities}
+          **Resistances**: ${body.damage_resistances}
+          **Immunities**: ${body.damage_immunities}
+          **Condition Immunities**: ${body.condition_immunities.map(
+            condition_immunitiy => condition_immunitiy.name
+          )}
+          **Darkvison**: ${body.senses.darkvision}
+          **PP**: ${body.senses.passive_perception}
+          **CR**: ${body.challenge_rating}
+          ${body.special_abilities.map(
+            special_ability =>
+              "**" + special_ability.name + "**: " + special_ability.desc
+          )}
+         `);
+          msg.channel.send(
+            `${body.actions.map(
+              action => "**" + action.name + "**: " + action.desc
+            )}`
+          );
+        }
+      }
+    );
+  }
 });
 
 client.login();
