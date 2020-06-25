@@ -6,18 +6,11 @@ const client = new Discord.Client();
 const http = require("http");
 const express = require("express");
 const app = express();
-app.get("/", (request, response) => {
-  console.log(Date.now() + " Ping Received");
-  response.sendStatus(200);
-});
-app.listen(process.env.PORT);
-setInterval(() => {
-  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 280000);
-client.on("ready", () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+const port = 3000;
 
+app.get('/', (req, res) => res.send('Hello World!'));
+
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 client.on("message", msg => {
   if (!msg.content.startsWith(prefix) || msg.author.bot) return;
   const message = msg;
