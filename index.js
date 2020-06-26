@@ -1,11 +1,28 @@
 require("dotenv").config();
 const prefix = process.env.PREFIX;
+const dbl = proccess.env.GGTOKEN;
 const request = require("request");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const http = require("http");
 const express = require("express");
 const app = express();
+const DBL = require("dblapi.js");
+const dbl = new DBL(ggtoken, client);
+dbl.on('posted', () => {
+  console.log(`server count posted`);
+})
+
+dbl.on('error', e => {
+ console.log(`Oops! ${e}`);
+})
+
+client.on('ready', () => {
+
+  setInterval(() => {
+      dbl.postStats(client.guilds.size, client.shards.Id, client.shards.total);
+  }, 1800000);
+});
 const port = 3000;
 
 app.get('/', (req, res) => res.send('Hello World!'));
