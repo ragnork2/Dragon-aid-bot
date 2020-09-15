@@ -1,6 +1,6 @@
 {
   "name": "thegreatdiscorddanddbotproject",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A bot that pulls information from the D and D basic rules",
   "main": "index.js",
   "scripts": {
@@ -8,18 +8,19 @@
     "start": "node index.js"
   },
   "engines": {
-    "node": "13.1.0",
+    "node": "14.1.0",
     "npm": "*"
   },
   "author": "ragnork1487",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
     "chai": "^4.2.0",
-    "mocha": "^7.1.2",
-    "discord.js": "^12.1.1",
+    "dblapi.js": "^2.4.0",
+    "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "request": "^2.88.2"
+    "express": "^4.17.1",
+    "mocha": "^7.1.2",
+    "request": "^2.88.2
   },
   "devDependencies": {},
   "keywords": []
