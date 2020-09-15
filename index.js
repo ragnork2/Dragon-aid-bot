@@ -1,6 +1,6 @@
 require("dotenv").config();
 const prefix = process.env.PREFIX;
-const dbl = proccess.env.GGTOKEN;
+const ggtoken = process.env.GGTOKEN;
 const request = require("request");
 const Discord = require("discord.js");
 const client = new Discord.Client();
@@ -8,6 +8,7 @@ const http = require("http");
 const express = require("express");
 const app = express();
 const DBL = require("dblapi.js");
+
 const dbl = new DBL(ggtoken, client);
 dbl.on('posted', () => {
   console.log(`server count posted`);
@@ -20,14 +21,9 @@ dbl.on('error', e => {
 client.on('ready', () => {
 
   setInterval(() => {
-      dbl.postStats(client.guilds.size, client.shards.Id, client.shards.total);
+      dbl.postStats(client.guilds.size);
   }, 1800000);
 });
-const port = 3000;
-
-app.get('/', (req, res) => res.send('Hello World!'));
-
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 client.on("message", msg => {
   if (!msg.content.startsWith(prefix) || msg.author.bot) return;
   const message = msg;
@@ -48,15 +44,47 @@ client.on("message", msg => {
         if (err) {
           msg.channel.send("Invalid, please try again");
         } else if (command === "spell") {
-          msg.channel.send(`Name: ${body.name}
-          ${body.school.name}
-          Level:${body.level}
-          Range: ${body.range}
-          Components: ${body.components} (Material Components, if any: ${body.material})
-          Duration: ${body.duration} Concentration? ${body.concentration}
-          Time to cast: ${body.casting_time}
-          ${body.desc}
-          At Higher Levels: ${body.higher_level}`);
+          const spellEmbed = {
+            color: 	0x8B0000,
+            title: `${body.name}`,
+            fields: [
+              {
+                name: 'School and level ',
+                value: ` ${body.school?.name} Level ${body.level} `,
+                inline: true,
+              },
+              {
+                name: 'Componenets',
+                value: `${body.components}(material components: ${body.material})`,
+                inline: true,
+              },
+              {
+                name: 'Range',
+                value: `${body.range}`,
+                inline: true,
+              },
+              {
+                name: 'Duration',
+                value: `${body.duration} Concentration? ${body.concentration}`,
+                inline: true,
+              },
+              {
+                name: 'Casting Time',
+                value: `${body.casting_time}`,
+                inline: true,
+              },
+              {
+                name: 'Description',
+                value: `${body.desc} ${body.higher_level}`,
+                inline: false,
+              },
+            ],
+            timestamp: new Date(),
+            footer: {
+              text: 'Make sure to upvote the bot and join the support server',
+            },
+          };
+        msg.channel.send({embed:spellEmbed});
         }
       }
     );
@@ -69,17 +97,38 @@ client.on("message", msg => {
         if (err) {
           msg.channel.send("Invalid,please try again");
         } else if (command === "weapon") {
-          msg.channel.send(`Name: ${body.name}`);
-          msg.channel.send(
-            `short range: ${body.range.normal}ft; long range: ${body.range.long}ft`
-          );
-          msg.channel.send(
-            `Damage: ${body.damage.damage_dice} ${body.damage.damage_type.name}`
-          );
-          msg.channel.send(
-            `Properties:${body.properties.map(property => property.name)}`
-          );
-          msg.channel.send(`Cost:${body.cost.quantity} ${body.cost.unit}`);
+          const wepEmbed = {
+            color: 	0xFFD700,
+            title: `${body.name}`,
+            fields: [
+              {
+                name: 'Cost ',
+                value: ` ${body.cost?.quantity} ${body.cost?.unit} `,
+                inline: true,
+              },
+              {
+                name: 'Damage',
+                value: `${body.damage?.damage_dice} ${body.damage?.damage_type?.name}`,
+                inline: true,
+              },
+              {
+                name: 'Range',
+                value: `short range: ${body.range?.normal}ft; long range: ${body.range?.long}ft`,
+                inline: true,
+              },
+              {
+                name: 'Properties',
+                value: `${body.properties?.map(property => property?.name)}`,
+                inline: false,
+              },
+              
+            ],
+            timestamp: new Date(),
+            footer: {
+              text: 'Make sure to upvote the bot and join the support server',
+            },
+          };
+        msg.channel.send({embed:wepEmbed});
         }
       }
     );
@@ -92,8 +141,22 @@ client.on("message", msg => {
         if (err) {
           msg.channel.send("Invalid,Please try again");
         } else if (command === "condition") {
-          msg.channel.send(`Name: ${body.name}`);
-          msg.channel.send(`${body.desc}`);
+          const conEmbed = {
+            color: 	0x38761D,
+            title: `${body.name}`,
+            fields: [
+              {
+                name: 'Description',
+                value: ` ${body.desc} `,
+                inline: false,
+              },
+            ],
+            timestamp: new Date(),
+            footer: {
+              text: 'Make sure to upvote the bot and join the support server',
+            },
+          };
+        msg.channel.send({embed:conEmbed});
         }
       }
     );
@@ -106,13 +169,47 @@ client.on("message", msg => {
         if (err) {
           msg.channel.send("invalid, please try again");
         } else if (command === "armor") {
-          msg.channel.send(`
-Name: ${body.name} 
-Type: ${body.armor_category}
-AC:${body.armor_class.base}
-Do I get A dex bonus:${body.armor_class.dex_bonus} Maximum Bonus: ${body.armor_class.max_bonus}
-Disadvantage on stealth?: ${body.stealth_disadvantage}
-Cost:${body.cost.quantity} ${body.cost.unit}`);
+          const armEmbed = {
+            color: 	0x058787,
+            title: `${body.name}`,
+            fields: [
+              {
+                name: 'Type',
+                value: ` ${body.armor_category} `,
+                inline: true,
+              },
+              {
+                name: 'Base AC',
+                value: ` ${body.armor_class?.base} `,
+                inline: true,
+              },
+              {
+                name: 'Do I get a Dex bonus?',
+                value: ` ${body.armor_class?.dex_bonus} `,
+                inline: true,
+              },
+              {
+                name: 'Dex Bonus Max',
+                value: ` ${body.armor_class?.max_bonus} `,
+                inline: true,
+              },
+              {
+                name: 'Stealth Disadvantage?',
+                value: ` ${body.stealth_disadvantage} `,
+                inline: true,
+              },
+              {
+                name: 'Cost',
+                value: ` ${body.cost?.quantity} ${body.cost?.unit} `,
+                inline: true,
+              },
+            ],
+            timestamp: new Date(),
+            footer: {
+              text: 'Make sure to upvote the bot and join the support server',
+            },
+          };
+        msg.channel.send({embed:armEmbed});
         }
       }
     );
@@ -125,11 +222,32 @@ Cost:${body.cost.quantity} ${body.cost.unit}`);
         if (err) {
           msg.channel.send("Invalid, please try again");
         } else if (command === "feature") {
-          msg.channel.send(`
-          Name: ${body.name}
-          Class: ${body.class.name}
-          Level:${body.level}
-          ${body.desc}`);
+          const feaEmbed = {
+            color: 	0x351C75,
+            title: `${body.name}`,
+            fields: [
+              {
+                name: 'Class',
+                value: ` ${body.class?.name} `,
+                inline: true,
+              },
+              {
+                name: 'Level',
+                value: ` ${body.level} `,
+                inline: true,
+              },
+              {
+                name: 'Description',
+                value: ` ${body.desc} `,
+                inline: false,
+              },
+            ],
+            timestamp: new Date(),
+            footer: {
+              text: 'Make sure to upvote the bot and join the support server',
+            },
+          };
+        msg.channel.send({embed:feaEmbed});
         }
       }
     );
@@ -142,49 +260,132 @@ Cost:${body.cost.quantity} ${body.cost.unit}`);
         if (err) {
           msg.channel.send("Invalid, please try again");
         } else if (command === "monster") {
-          msg.channel.send(`
-                    **Name**: ${body.name}
-          **Size**: ${body.size}
-          **Type**:${body.type}
-          **alignment**:${body.alignment}
-          **AC**: ${body.armor_class}
-          **HP**: ${body.hit_points}
-          **Hit Dice**: ${body.hit_dice}
-          **Walk Speed**: ${body.speed.walk}
-          **Swim Speed**: ${body.speed.swim}
-          **Dig Speed**: ${body.speed.burrow}
-          **Fly Speed**: ${body.speed.fly}
-          **STR**: ${body.strength}
-          **DEX**: ${body.dexterity}
-          **CON**: ${body.constitution}
-          **INT**: ${body.intelligence}
-          **WIS**: ${body.wisdom}
-          **CHA**: ${body.charisma}
-          **proficiencies**:${body.proficiencies.map(
-            proficiency => proficiency.name
-          )}
-          **Vulnerabilities**: ${body.damage_vulnerabilities}
-          **Resistances**: ${body.damage_resistances}
-          **Immunities**: ${body.damage_immunities}
-          **Condition Immunities**: ${body.condition_immunities.map(
-            condition_immunitiy => condition_immunitiy.name
-          )}
-          **Darkvison**: ${body.senses.darkvision}
-          **PP**: ${body.senses.passive_perception}
-          **CR**: ${body.challenge_rating}
-          ${body.special_abilities.map(
-            special_ability =>
-              "**" + special_ability.name + "**: " + special_ability.desc
-          )}
-         `);
-          msg.channel.send(
-            `${body.actions.map(
-              action => "**" + action.name + "**: " + action.desc
-            )}`
-          );
+          const POTATO = {
+            color: 	0x351C75,
+            title: `${body.name}`,
+            fields: [
+              {
+                name: 'AC',
+                value: `${body.armor_class}`,
+                inline: true,
+              },
+              {
+                name: 'HP',
+                value: `${body.hit_points}`,
+                inline: true,
+              },
+              {
+                name: 'Hit Dice',
+                value: `${body.hit_dice}`,
+                inline: true,
+              },
+              {
+                name: 'CR',
+                value: `${body.challenge_rating}`,
+                inline: true,
+              },
+              {
+                name: 'PP',
+                value: `${body.senses?.passive_perception}`,
+                inline: true,
+              },
+              {
+                name: 'Darkvision',
+                value: `${body.senses?.darkvision}`,
+                inline: true,
+              },
+              {
+                name: 'Size',
+                value: ` ${body.size} `,
+                inline: true,
+              },
+              {
+                name: 'Type',
+                value: ` ${body.type} `,
+                inline: true,
+              },
+              {
+                name: 'Alignement',
+                value: ` ${body.alignment} `,
+                inline: true,
+              },
+              {
+                name: 'STR',
+                value: ` ${body.strength} `,
+                inline: true,
+              },
+              {
+                name: 'DEX',
+                value: ` ${body.dexterity} `,
+                inline: true,
+              },
+              {
+                name: 'CON',
+                value: ` ${body.constitution} `,
+                inline: true,
+              },
+              {
+                name: 'INT',
+                value: ` ${body.intelligence} `,
+                inline: true,
+              },
+              {
+                name: 'WIS',
+                value: ` ${body.wisdom} `,
+                inline: true,
+              },
+              {
+                name: 'CHA',
+                value: ` ${body.charisma} `,
+                inline: true,
+              },
+              {
+                name: 'Speeds',
+                value: ` Walk: ${body.speed?.walk}
+                Swim: ${body.speed.swim}
+                Dig: ${body.speed.burrow}
+                Fly:${body.speed.fly}  `,
+                inline: true,
+              },
+              {
+                name: 'Damage and condition modifiers',
+                value: ` Vulnerbilities:${body.damage_vulnerabilities}    Resistances:${body.damage_resistances}     Immunities:${body.damage_immunities}      Condition Immunities:${body.condition_immunities?.map(
+                     condition_immunitiy => condition_immunitiy?.name
+                  )} `,
+                inline: false,
+              },
+              {
+                name: 'Proficiencies',
+                value: `${body.proficiencies.map(
+                       proficiency => proficiency.name
+                     )}`,
+                inline: false,
+              },
+              {
+                name: 'Special abilities',
+                value: `${body.special_abilities?.map(
+                     special_ability =>
+                      "**" + special_ability?.name + "**: " + special_ability?.desc
+                   )}`,
+                inline: false,
+              },
+              {
+                name: 'Actions',
+                value: `${body.actions?.map(
+                         action => "**" + action?.name + "**: " + action?.desc
+                       )}`,
+                inline: false,
+              },
+            ],
+            timestamp: new Date(),
+            footer: {
+              text: 'Make sure to upvote the bot and join the support server',
+            },
+          };
+        msg.channel.send({embed:POTATO});
         }
-      }
-    );
+      })
+    ;
   }
 });
 
