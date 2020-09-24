@@ -81,7 +81,7 @@ client.on("message", msg => {
             ],
             timestamp: new Date(),
             footer: {
-              text: 'Make sure to upvote the bot and join the support server',
+              text: 'Powered by https://www.dnd5eapi.co/',
             },
           };
         msg.channel.send({embed:spellEmbed});
@@ -125,7 +125,7 @@ client.on("message", msg => {
             ],
             timestamp: new Date(),
             footer: {
-              text: 'Make sure to upvote the bot and join the support server',
+              text: 'Powered by https://www.dnd5eapi.co/',
             },
           };
         msg.channel.send({embed:wepEmbed});
@@ -153,7 +153,7 @@ client.on("message", msg => {
             ],
             timestamp: new Date(),
             footer: {
-              text: 'Make sure to upvote the bot and join the support server',
+              text: 'Powered by https://www.dnd5eapi.co/',
             },
           };
         msg.channel.send({embed:conEmbed});
@@ -206,7 +206,7 @@ client.on("message", msg => {
             ],
             timestamp: new Date(),
             footer: {
-              text: 'Make sure to upvote the bot and join the support server',
+              text: 'MPowered by https://www.dnd5eapi.co/',
             },
           };
         msg.channel.send({embed:armEmbed});
@@ -244,7 +244,7 @@ client.on("message", msg => {
             ],
             timestamp: new Date(),
             footer: {
-              text: 'Make sure to upvote the bot and join the support server',
+              text: 'Powered by https://www.dnd5eapi.co/',
             },
           };
         msg.channel.send({embed:feaEmbed});
@@ -379,7 +379,7 @@ client.on("message", msg => {
             ],
             timestamp: new Date(),
             footer: {
-              text: 'Make sure to upvote the bot and join the support server',
+              text: 'Powered by https://www.dnd5eapi.co/',
             },
           };
         msg.channel.send({embed:POTATO});
