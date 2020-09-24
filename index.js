@@ -32,10 +32,7 @@ client.on("message", msg => {
   const args = badargs.join("-");
   if (msg.author.bot) return;
   if (msg.content.startsWith(`${prefix}help`))
-    msg.reply("Need help, head to https://discord.gg/UEcNzdw");
-  if (!args.length) {
-    return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`);
-  }
+    msg.reply("Need help, head to https://discord.gg/UEcNzdw")
   if (msg.content.startsWith(`${prefix}spell`)) {
     request(
       `http://www.dnd5eapi.co/api/spells/${args}`,
