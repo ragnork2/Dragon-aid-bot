@@ -278,7 +278,7 @@ client.on("message", msg => {
               },
               {
                 name: 'CR',
-                value: `${body.challenge_rating}`,
+                value: `${body.challenge_rating} (${body.xp} XP)`,
                 inline: true,
               },
               {
